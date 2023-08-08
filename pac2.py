@@ -227,10 +227,15 @@ class Fantasma(pygame.sprite.Sprite):
 			else:
 				anima = self.dic_direccion[self.direccion][2] + self.idFantasma * 2
 
+			# SET IMAGE del fantasma ----------------------------------
 			self.image = self.lista_imagenes[anima + self.nextAnima]
+			# ---------------------------------------------------------
 
-			if self.nextAnima == 1 and self.fantasmaAzul:
-				self.image.set_alpha(255) #30
+			intermitente = pygame.time.get_ticks()
+			duracion = self.game.obtenerDuracionAzules()
+
+			if self.nextAnima == 1 and self.fantasmaAzul and intermitente - self.game.ultimoUpdate_azules > int(duracion / 1.5):
+				self.image.set_alpha(100) #30
 			else:
 				self.image.set_alpha(255)
 

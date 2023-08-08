@@ -161,9 +161,20 @@ class Game:
 
 
 	def new_game(self):
-		self.puntos = 0
-		self.nivel = 1
-		self.vidas = 3
+		if self.nivelSuperado:
+			self.nivelSuperado = False 
+			self.sumaPtosComeFantasmas = 100
+			self.lista_bonus_comeFantasmas.empty()
+			self.temporizadorAzules = False
+			self.reinstanciar_pacmanFantasmas = True
+			self.preparado = True 
+			self.lista_los4fantasmas.empty()
+			self.ultimo_update_preparado = pygame.time.get_ticks()
+			self.sonido_inicioNivel.play()
+		else:
+			self.puntos = 0
+			self.nivel = 1
+			self.vidas = 3
 
 		self.lista_sprites_adibujar.empty()
 		self.lista_textos.empty()
@@ -176,6 +187,9 @@ class Game:
 
 		if len(self.lista_puntosGordos) > 0:
 			self.lista_puntosGordos.empty()
+
+		if len(self.lista_pacman) > 0:
+			self.lista_pacman.empty()
 
 		self.crear_pantallaNivel()
 		self.instanciarObjetos()
@@ -251,9 +265,7 @@ class Game:
 		if self.temporizadorAzules:
 			calculo = pygame.time.get_ticks()
 
-			duracion = self.duracion_azules - self.nivel * 500
-			if duracion < 2000:
-				duracion = 2000
+			duracion = self.obtenerDuracionAzules()
 
 			if calculo - self.ultimoUpdate_azules > duracion:
 				self.temporizadorAzules = False 
@@ -272,13 +284,23 @@ class Game:
 
 
 
+	def obtenerDuracionAzules(self):
+		duracion = self.duracion_azules - self.nivel * 500
+		if duracion < 2000:
+			duracion = 2000
+
+		return duracion
+
+
+
+
 
 	def checkNivelSuperado(self):
 		if len(self.lista_puntitos) <= 0 and not self.nivelSuperado and self.enJuego:
 			self.nivelSuperado = True 
 			self.nivel += 1
 			print(self.nivelSuperado)
-			self.sonido_eatingCherry.play()
+			self.new_game()
 
 
 

@@ -7,7 +7,11 @@ class LaberintoTile(pygame.sprite.Sprite):
 		super().__init__()
 		self.game = game 
 
-		image_rect = self.game.obtenerGrafico('bloquepac.png', 1)
+		if self.game.nivel > 3:
+			image_rect = self.game.obtenerGrafico('bloquepac3.png', 1)
+		else:
+			image_rect = self.game.obtenerGrafico(f'bloquepac{self.game.nivel}.png', 1)
+
 		self.image = image_rect[0]
 		self.rect = image_rect[1]
 		self.rect.x = x * TX
@@ -62,7 +66,7 @@ class PuntosGordos(pygame.sprite.Sprite):
 		self.rect.centery = y * TY + int(TY / 2)
 
 		self.ultimo_update = pygame.time.get_ticks()
-		self.vel_anima = 120
+		self.vel_anima = 150
 
 
 
@@ -121,12 +125,12 @@ class Textos(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.center = (x, y)
 
-		if texto == '0':
+		if y == self.game.TY * 2:
 			self.renderPtos = True
 		else:
 			self.renderPtos = False
 
-		if texto == '1':
+		if y == self.game.TY * 5:
 			self.renderNivel = True
 		else:
 			self.renderNivel = False
