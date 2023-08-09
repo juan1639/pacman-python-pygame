@@ -1,7 +1,10 @@
 import pygame
 import random
 
-
+# ======================================================================
+# 	Módulo (pac2.py) ... class Fantasma 
+#
+# ----------------------------------------------------------------------
 class Fantasma(pygame.sprite.Sprite):
 	def __init__(self, game, x, y, idFantasma, dirPorDefecto, fantasmaAzul, ojos):
 		super().__init__()
@@ -94,14 +97,10 @@ class Fantasma(pygame.sprite.Sprite):
 		self.cadenciaSirena = 500	# Cada cuanto suena (para NO acumular el Buffer)
 
 
-
-
 	def update(self):
 		self.cambiarAnimacion()
 		self.checkColisionesAvanzar()
 		self.checkColisionesVsPacman()
-
-
 
 
 	def checkColisionesAvanzar(self):
@@ -136,16 +135,11 @@ class Fantasma(pygame.sprite.Sprite):
 			self.velXY = (velX, velY)
 
 
-
-
-
 	def elegirOtraDireccion(self):
 		opciones = self.dic_direccion[self.direccion][3]
 		num_rnd = random.randrange(3) * 2
 		self.direccion = opciones[num_rnd] + opciones[num_rnd + 1]
 		# print(self.direccion)
-
-
 
 
 	def fantasmaPersigue(self):
@@ -167,10 +161,6 @@ class Fantasma(pygame.sprite.Sprite):
 		velY = self.dic_direccion[self.direccion][1]
 		self.velXY = (velX, velY)
 
-	
-	
-
-
 
 	def check_colisionLaberintoVelXY(self, x, y):
 		if self.checkEscapatorias(x, y):
@@ -182,8 +172,6 @@ class Fantasma(pygame.sprite.Sprite):
 			return True
 		else:
 			return False
-
-
 
 
 	def checkEscapatorias(self, x, y):
@@ -202,10 +190,6 @@ class Fantasma(pygame.sprite.Sprite):
 			return True
 
 		return False
-
-
-
-
 
 
 	def cambiarAnimacion(self):
@@ -241,8 +225,6 @@ class Fantasma(pygame.sprite.Sprite):
 
 			self.rect.x = x 
 			self.rect.y = y 
-	
-
 
 
 	def checkColisionesVsPacman(self):
@@ -274,11 +256,4 @@ class Fantasma(pygame.sprite.Sprite):
 				else:
 					self.game.instanciarPacmanDies(impacto.rect.x, impacto.rect.y)
 					self.game.sonido_pacmanDies.play()
-
-
-
-
-
-
-
 

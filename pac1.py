@@ -1,8 +1,10 @@
 import pygame
 import random
 
-
-
+# ======================================================================
+# 	Módulo (pac1.py) ... class PacMan y class PacManDies 
+#
+# ----------------------------------------------------------------------
 class PacMan(pygame.sprite.Sprite):
 	def __init__(self, game, x, y, dirPorDefecto):
 		super().__init__()
@@ -48,8 +50,6 @@ class PacMan(pygame.sprite.Sprite):
 		self.cadenciaSirena = 500	# Cada cuanto suena (para NO acumular el Buffer)
 
 
-
-
 	def update(self):
 		if not self.game.enJuego:
 			return
@@ -58,7 +58,6 @@ class PacMan(pygame.sprite.Sprite):
 		self.cambiarAnimacion()
 		self.checkColisionesAvanzar()
 		self.sonido_sirena()
-
 
 
 	def checkColisionesAvanzar(self):
@@ -88,7 +87,6 @@ class PacMan(pygame.sprite.Sprite):
 			self.rect.y += self.velXY[1] * self.vel
 
 
-
 	def check_colisionLaberintoPulsada(self, x, y):
 		velX = self.dic_Pulsada[self.pulsada][0]
 		velY = self.dic_Pulsada[self.pulsada][1]
@@ -104,7 +102,6 @@ class PacMan(pygame.sprite.Sprite):
 			return False
 
 
-
 	def check_colisionLaberintoVelXY(self, x, y):
 		if self.checkEscapatorias(x, y, self.velXY[0]):
 			return
@@ -115,8 +112,6 @@ class PacMan(pygame.sprite.Sprite):
 			return True
 		else:
 			return False
-	
-
 
 
 	def checkEscapatorias(self, x, y, velX):
@@ -137,9 +132,6 @@ class PacMan(pygame.sprite.Sprite):
 		return False
 
 
-
-
-
 	def leer_teclado(self):
 		tecla = pygame.key.get_pressed()
 
@@ -154,7 +146,6 @@ class PacMan(pygame.sprite.Sprite):
 
 		elif tecla[pygame.K_DOWN]:
 			self.pulsada = 'do'
-
 
 
 	def cambiarAnimacion(self):
@@ -176,14 +167,11 @@ class PacMan(pygame.sprite.Sprite):
 			self.rect.y = y 
 
 
-
 	def sonido_sirena(self):
 		calculo = pygame.time.get_ticks()
 		if calculo - self.ultimo_updateSirena > self.cadenciaSirena:
 			self.ultimo_updateSirena = calculo
 			self.game.sonido_sirena.play(maxtime=500)
-
-
 
 
 class PacManDies(pygame.sprite.Sprite):
@@ -213,7 +201,6 @@ class PacManDies(pygame.sprite.Sprite):
 		self.duracion_dies = 2400		# Tiempo dies 'dando vueltas'
 
 
-
 	def update(self):
 		calculo = pygame.time.get_ticks()
 
@@ -233,7 +220,6 @@ class PacManDies(pygame.sprite.Sprite):
 			self.rect.y = y 
 
 		self.checkDuracionDies()
-
 
 
 	def checkDuracionDies(self):
