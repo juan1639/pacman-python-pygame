@@ -135,4 +135,31 @@ class Textos(pygame.sprite.Sprite):
 			self.image = self.font.render(f'{self.game.nivel}', True, self.qcolor)
 
 
+class itemFrutas(pygame.sprite.Sprite):
+	def __init__(self, game, x, y):
+		super().__init__()
+		self.game = game 
+
+		item = self.game.nivel 
+		if item > 4:
+			item = 4 
+
+		image_rect = self.game.obtenerGrafico(f'item{item}.png', 1)
+		self.image = image_rect[0]
+		self.rect = image_rect[1]
+		self.x = x 
+		self.y = y
+		self.rect.x = x * self.game.TX 	
+		self.rect.y = y * self.game.TY
+
+	def update(self):
+		colision = pygame.sprite.spritecollide(self, self.game.lista_pacman, False)
+		if colision:
+			self.kill()
+			sumaPtosFruta = (self.game.nivel * 10) * (self.game.nivel * 10)
+			self.game.puntos += sumaPtosFruta
+			self.game.ultimo_update_itemFruta = pygame.time.get_ticks()
+			self.game.instanciaPtosComeFantasmas(sumaPtosFruta, self.x, self.y)
+			self.game.sonido_eatingCherry.play()
+
 

@@ -133,6 +133,8 @@ class Game:
 			self.nivel = 1
 			self.vidas = 3
 
+		self.ultimo_update_itemFruta = pygame.time.get_ticks()
+
 		self.lista_sprites_adibujar.empty()
 		self.lista_textos.empty()
 
@@ -148,8 +150,12 @@ class Game:
 		if len(self.lista_pacman) > 0:
 			self.lista_pacman.empty()
 
+		if len(self.lista_items) > 0:
+			self.lista_items.empty()
+
 		self.crear_pantallaNivel()
 		self.instanciarObjetos()
+		self.instanciar_itemFrutas()
 		self.instanciarTextosMarcadores()
 		self.instanciaTextoPreparado()
 
@@ -225,20 +231,11 @@ class Game:
 		self.lista_sprites_adibujar.add(self.pacman)
 		self.lista_pacman.add(self.pacman)
 
-		# if self.vidas >= 1:
-		#     for i in range(self.vidas):
-		#         mostrarvidas = MostrarVidas(self, i + 1)
-		#         self.arrayMostrarVidas.append(mostrarvidas)
-		#         self.lista_sprites_adibujar.add(self.arrayMostrarVidas[i])
-
-
 		for i in range(4):
 			datos = self.lista_argumentosFantasmas[i]
 			coorX = datos[0]
 			coorY = datos[1]
 			self.instanciar_fantasma(coorX, coorY, i, datos[3], False, False)
-
-		# self.instanciar_item()
 
 
 	def instanciar_fantasma(self, coorX, coorY, i, direc, azul, ojos):
@@ -252,12 +249,20 @@ class Game:
 		self.lista_sprites_adibujar.add(pacmanDies)
 
 
-	def instanciar_item(self):
-		self.sonido_eatingCherry.play()
+	def instanciar_itemFrutas(self):
+		if len(self.lista_items) > 0 or not self.enJuego:
+			return 
 
-		self.item = Items(self, 9, 11)
-		self.lista_sprites_adibujar.add(self.item)
-		self.lista_items.add(self.item)
+		calculo = pygame.time.get_ticks()
+		if calculo - self.ultimo_update_itemFruta > 12000:
+			self.sonido_eatingCherry.play()
+			itemfruta = itemFrutas(self, 9, 11) 	#Posicion Item fija (9, 11)
+			self.lista_sprites_adibujar.add(itemfruta)
+			self.lista_items.add(itemfruta)
+
+			if len(self.lista_bonus_comeFantasmas) > 0:
+				self.lista_bonus_comeFantasmas.empty()
+
 
 	# Instancias de Textos --------------------------------------
 	def instanciarTextosPresentacion(self):
@@ -324,9 +329,10 @@ class Game:
 	def instanciaPtosComeFantasmas(self, showBonus, x, y):
 		# print(str(showBonus))
 		textoBonus = Textos(self, str(showBonus), self.RESOLUCION[0] // 20, 
-			x * self.TX, y * self.TY, self.ROJO)
+			x * self.TX + int(self.TX / 2), y * self.TY + int(self.TY / 2), self.ROJO)
 
 		self.lista_bonus_comeFantasmas.add(textoBonus)
+
 
 	# CHECKEOS (Temporizador Azules, Nivel superado, Transicion GameOver-Newgame)
 	def checkTemporizadorAzules(self):
@@ -385,6 +391,7 @@ class Game:
 
 		self.checkTemporizadorAzules()
 		self.checkNivelSuperado()
+		self.instanciar_itemFrutas()
 
 		if not self.preparado:
 			self.lista_sprites_adibujar.update()
