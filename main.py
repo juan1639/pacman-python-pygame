@@ -61,6 +61,7 @@ class Game:
 		self.enJuego = False
 		self.gameOver = False
 		self.nivelSuperado = False
+		self.invulnerabilidad = False
 
 		self.reinstanciar_pacmanFantasmas = True
 
@@ -100,6 +101,8 @@ class Game:
 
 		self.pantalla = pygame.display.set_mode(self.RESOLUCION)
 		self.reloj = pygame.time.Clock()
+
+		self.imagen_vidasMarcador = self.obtenerGrafico('pacman1.png', 1)
 
 		self.lista_sprites_adibujar = pygame.sprite.Group()
 		self.lista_pacman = pygame.sprite.Group()
@@ -192,6 +195,16 @@ class Game:
 		image_rect = (image, rect)
 
 		return image_rect
+
+
+	def renderizar_vidasMarcador(self):
+		if self.menuPresentacion or self.gameOver or self.vidas <= 0:
+			return 
+
+		for i in range(self.vidas):
+			self.pantalla.blit(self.imagen_vidasMarcador[0], (self.TX * self.COLUMNAS, 
+				self.TY * 7 + i * self.TY))
+
 
 	# INSTANCIAR (Sprites & Textos) ------------------------------------
 	def instanciarObjetos(self):
@@ -309,7 +322,7 @@ class Game:
 
 
 	def instanciaPtosComeFantasmas(self, showBonus, x, y):
-		print(str(showBonus))
+		# print(str(showBonus))
 		textoBonus = Textos(self, str(showBonus), self.RESOLUCION[0] // 20, 
 			x * self.TX, y * self.TY, self.ROJO)
 
@@ -400,6 +413,8 @@ class Game:
 		pygame.draw.rect(self.pantalla, self.GRIS_FONDO, 
 			(self.COLUMNAS * self.TX, 11 * self.TY, self.TX, self.TY))
 
+		self.renderizar_vidasMarcador()
+
 		self.lista_bonus_comeFantasmas.draw(self.pantalla)
 		self.lista_textos.draw(self.pantalla)
 
@@ -407,10 +422,16 @@ class Game:
 	def check_event(self):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-			    pygame.quit()
-			    sys.exit()
+				self.programaEjecutandose = False
+				pygame.quit()
+				sys.exit()
 
 			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE:
+					self.programaEjecutandose = False
+					pygame.quit()
+					sys.exit()
+
 				if event.key == pygame.K_RETURN and self.menuPresentacion:
 					pygame.mixer.music.stop()
 					self.menuPresentacion = False

@@ -143,17 +143,23 @@ class Fantasma(pygame.sprite.Sprite):
 
 
 	def fantasmaPersigue(self):
+		noPerseguir = random.randrange(100)
+		if noPerseguir > self.game.nivel * 30:
+			return
+		
 		horiz_vert = random.randrange(10)
 
 		if horiz_vert < 5:
 			if self.game.pacman.rect.y < self.rect.y:
 				self.direccion = 'up'
+
 			elif self.game.pacman.rect.y > self.rect.y:
 				self.direccion = 'do'
 
 		else:
 			if self.game.pacman.rect.x < self.rect.x:
 				self.direccion = 'le'
+
 			elif self.game.pacman.rect.x > self.rect.x:
 				self.direccion = 'ri'
 
@@ -228,7 +234,7 @@ class Fantasma(pygame.sprite.Sprite):
 
 
 	def checkColisionesVsPacman(self):
-		if self.ojos:
+		if self.ojos or self.game.invulnerabilidad:
 			return
 
 
