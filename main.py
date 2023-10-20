@@ -5,6 +5,7 @@ from pac1 import *
 from pac2 import *
 from pac3 import *
 from pac4 import *
+from pac5 import *
 
 # ====================================================================================
 #	Codigo Principal (main.py) ... class Game
@@ -32,28 +33,6 @@ class Game:
 		self.ROJO = (230, 30, 20)
 		self.VERDE_FONDO = (20, 240, 30)
 		self.AZUL_C = (144, 205, 205)
-
-		self.laberinto = [
-		9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
-		9,5,1,1,1,1,1,1,1,9,1,1,1,1,1,1,1,5,9,
-		9,1,9,9,1,9,9,9,1,9,1,9,9,9,1,9,9,1,9,
-
-		9,1,9,9,1,9,9,9,1,9,1,9,9,9,1,9,9,1,9,
-		9,1,1,1,2,1,1,1,1,0,1,1,1,1,2,1,1,1,9,
-		9,1,9,9,1,9,1,9,9,9,9,9,1,9,1,9,9,1,9,
-
-		9,1,1,1,1,9,1,1,1,9,1,1,1,1,1,1,1,1,9,
-		9,9,9,9,1,9,9,9,1,9,1,9,9,9,1,9,9,9,9,
-		9,1,1,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,9,
-
-		9,1,9,9,1,9,1,9,9,9,9,9,1,9,1,9,9,1,9,
-		9,1,9,9,1,9,1,9,9,9,9,9,1,9,1,9,9,1,9,
-		0,1,1,1,1,9,1,1,1,0,1,1,1,9,1,1,1,1,0,
-
-		9,1,9,9,1,9,1,9,9,9,9,9,1,9,1,9,9,1,9,
-		9,5,1,1,2,1,1,1,1,0,1,1,1,1,2,1,1,5,9,
-		9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
-		]
 
 		self.programaEjecutandose = True
 		self.menuPresentacion = True
@@ -130,7 +109,7 @@ class Game:
 			self.sonido_inicioNivel.play()
 		else:
 			self.puntos = 0
-			self.nivel = 1
+			self.nivel = 2
 			self.vidas = 3
 
 		self.ultimo_update_itemFruta = pygame.time.get_ticks()
@@ -161,6 +140,9 @@ class Game:
 
 
 	def crear_pantallaNivel(self):
+		pantalla = Pantallas(self)
+		self.laberinto = pantalla.seleccionar_pantalla()
+
 		contador = -1
 
 		for i in range(self.FILAS):
